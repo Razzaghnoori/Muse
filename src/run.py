@@ -21,7 +21,11 @@ class MIDI(object):
     """
 
     def __init__(self, midi_path, beat_res=12):
-        self.multitrack = Multitrack(midi_path, beat_resolution=beat_res)
+        try:
+            self.multitrack = Multitrack(midi_path, beat_resolution=beat_res)
+        except:
+            print('Crap')
+        
         self.multitrack.pad_to_multiple(4 * beat_res)
         self.multitrack.binarize()
         self.beat_res = beat_res

@@ -81,3 +81,6 @@ def setup_loggers(log_dir, loglevel=FILE_LOGLEVEL, log_format=FILE_LOG_FORMAT):
             add_file_handler(
                 logging.getLogger(name), os.path.join(log_dir, name + '.log'),
                 loglevel, log_format)
+
+def time_signiture_match():
+    pass
