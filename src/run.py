@@ -60,7 +60,7 @@ class MIDIGroup(object):
                     except:
                         print('Fuck')
                 print(midi_list)
-            self.list_pianorolls = [x.pianorll for x in self.list_midis]
+            self.list_pianorolls = [x.pianoroll for x in self.list_midis]
 
     def _generate_pianoroll(self):
         batch_size = len(self.list_midis)
