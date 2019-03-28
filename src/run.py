@@ -4,8 +4,8 @@ import traceback
 from os import walk
 from os.path import join
 from pypianoroll import Multitrack
-from src.strategies import map_to_closest
-from src.musegan.utils import load_yaml
+from strategies import map_to_closest
+from musegan.utils import load_yaml
 
 def npz_to_midi(npz_path, midi_path):
     Multitrack(npz_path).write(midi_path)
