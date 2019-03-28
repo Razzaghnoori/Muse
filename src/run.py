@@ -23,12 +23,11 @@ class MIDI(object):
     def __init__(self, midi_path, beat_res=12):
         try:
             self.multitrack = Multitrack(midi_path, beat_resolution=beat_res)
+            self.multitrack.pad_to_multiple(4 * beat_res)
+            self.multitrack.binarize()
+            self.beat_res = beat_res
         except:
             print('Crap')
-        
-        self.multitrack.pad_to_multiple(4 * beat_res)
-        self.multitrack.binarize()
-        self.beat_res = beat_res
 
     def normalize(self, target_programs, strategies_=['closest']):
         for strategy in strategies_:
@@ -69,14 +68,13 @@ class MIDIGroup(object):
                         self.list_midis.append(midi)
                     except:
                         traceback.print_exc()
-                print(midi_list)
             self.list_pianorolls = [x.pianoroll for x in self.list_midis]
 
     def _get_normalized_MIDI(self, midi_path):
         midi = MIDI(midi_path)
         midi.normalize(self.config['midi']['programs'])
         midi.compute_pianoroll()
-        return midi_path
+        return midi
         
     def _generate_pianoroll(self):
         batch_size = len(self.list_midis)
