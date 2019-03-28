@@ -64,7 +64,7 @@ class MIDIGroup(object):
                         midi = self._get_normalized_MIDI(midi_path)
                         self.list_midis.append(midi)
                     except:
-                        traceback.print_exc()
+                        print('Crap')
             self.list_pianorolls = [x.pianoroll for x in self.list_midis]
 
     def _get_normalized_MIDI(self, midi_path):
@@ -82,7 +82,7 @@ class MIDIGroup(object):
         pad_requirements = max_of_each_axis - shapes
         pad_requirements = pad_requirements.reshape(-1)
         pad_requirements = np.hstack([np.zeros(pad_requirements.size), \
-            pad_requirements]).reshape(-1, n_dim, 2)
+            pad_requirements]).reshape(-1, n_dims, 2)
         print(pad_requirements)
 
         #(batch_size, n_bars, n_timesteps, n_pitches, n_tracks)
