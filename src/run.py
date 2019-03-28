@@ -49,7 +49,7 @@ class MIDIGroup(object):
 
         if midi_list is not None:
             self.list_midis = midi_list
-            self.list_pianorolls = [x.pianorll for x in self.list_midis]
+            self.list_pianorolls = [x.pianoroll for x in self.list_midis]
         elif midi_dir is not None:
             for dir, _, midi_list in walk(midi_dir):
                 for x in midi_list:
