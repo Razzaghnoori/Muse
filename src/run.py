@@ -68,7 +68,7 @@ class MIDIGroup(object):
                 print(midi_list)
             self.list_pianorolls = [x.pianoroll for x in self.list_midis]
 
-    def _get_normalized_MIDI(midi_path):
+    def _get_normalized_MIDI(self, midi_path):
         midi = MIDI(midi_path)
         midi.normalize(self.config['midi']['programs'])
         midi.compute_pianoroll()
