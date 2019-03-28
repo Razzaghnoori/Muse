@@ -1,4 +1,5 @@
 import numpy as np
+import traceback
 
 from os import walk
 from os.path import join
@@ -63,7 +64,7 @@ class MIDIGroup(object):
                         midi = self._get_normalized_MIDI(midi_path)
                         self.list_midis.append(midi)
                     except:
-                        print('Fuck')
+                        traceback.print_exc()
                 print(midi_list)
             self.list_pianorolls = [x.pianoroll for x in self.list_midis]
 
