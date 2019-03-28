@@ -6,10 +6,10 @@ from pprint import pformat
 import numpy as np
 import scipy.stats
 import tensorflow as tf
-from musegan.config import LOGLEVEL, LOG_FORMAT
-from musegan.data import load_data, get_samples
-from musegan.model import Model
-from musegan.utils import make_sure_path_exists, load_yaml, update_not_none
+from src.musegan.config import LOGLEVEL, LOG_FORMAT
+from src.musegan.data import load_data, get_samples
+from src.musegan.model import Model
+from src.musegan.utils import make_sure_path_exists, load_yaml, update_not_none
 LOGGER = logging.getLogger("musegan.inference")
 
 def parse_arguments():
