@@ -4,6 +4,7 @@ from os import walk
 from os.path import join
 from pypianoroll import Multitrack
 from src.strategies import map_to_closest
+from src.musegan.utils import load_yaml
 
 def npz_to_midi(npz_path, midi_path):
     Multitrack(npz_path).write(midi_path)
@@ -44,8 +45,10 @@ class MIDI(object):
         print('Successfully compressed and saved the pianoroll.')
 
 class MIDIGroup(object):
-    def __init__(self, midi_list=None, midi_dir=None):
+    def __init__(self, midi_list=None, midi_dir=None, \
+        config_path='./exp/default/config.yaml'):
         self.list_midis = []
+        self.config = load_yaml(config_path)
 
         if midi_list is not None:
             self.list_midis = midi_list
@@ -56,12 +59,20 @@ class MIDIGroup(object):
                     if x.split('.')[-1] != 'mid':
                         continue
                     try:
-                        self.list_midis.append(MIDI(join(dir, x)))
+                        midi_path = join(dir, x)
+                        midi = self._get_normalized_MIDI(midi_path)
+                        self.list_midis.append(midi)
                     except:
                         print('Fuck')
                 print(midi_list)
             self.list_pianorolls = [x.pianoroll for x in self.list_midis]
 
+    def _get_normalized_MIDI(midi_path):
+        midi = MIDI(midi_path)
+        midi.normalize(self.config['midi']['programs'])
+        midi.compute_pianoroll()
+        return midi_path
+        
     def _generate_pianoroll(self):
         batch_size = len(self.list_midis)
         n_dims = self.list_pianorolls[0].ndim
