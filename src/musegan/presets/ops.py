@@ -6,6 +6,8 @@ DENSE_KERNEL_INITIALIZER = tf.truncated_normal_initializer(stddev=0.05)
 
 dense = lambda i, u: tf.layers.dense(
     i, u, kernel_initializer=DENSE_KERNEL_INITIALIZER)
+named_dense = lambda i, u, n: tf.layers.dense(
+    i, u, kernel_initializer=DENSE_KERNEL_INITIALIZER, name=n)
 conv2d = lambda i, f, k, s: tf.layers.conv2d(
     i, f, k, s, kernel_initializer=CONV_KERNEL_INITIALIZER)
 conv3d = lambda i, f, k, s: tf.layers.conv3d(

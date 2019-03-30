@@ -83,14 +83,16 @@ def setup():
 
 def load_training_data(params, config):
     """Load and return the training data."""
+    
     # Load data
-    if params['is_conditional']:
-        raise ValueError("Not supported yet.")
-    else:
-        labels = None
     LOGGER.info("Loading training data.")
     data = load_data(config['data_source'], config['data_filename'])
     LOGGER.info("Training data size: %d", len(data))
+
+    if params['is_conditional']:
+        lables = None    #TODO: Condition received from discriminator's flatten layer should be here. Shape must conform with data
+    else:
+        labels = None
 
     # Build dataset
     LOGGER.info("Building dataset.")
@@ -214,7 +216,8 @@ def main():
 
         # Get prediction nodes
         placeholder_z = tf.placeholder(tf.float32, shape=sample_z.shape)
-        placeholder_y = None
+        with tf.variable_scope('Discriminator', reuse=tf.AUTO_REUSE):
+            placeholder_y = tf.get_variable('last_dense')   #Parameterize this
         if params.get('is_accompaniment'):
             c_shape = np.append(sample_x.shape[:-1], 1)
             placeholder_c = tf.placeholder(tf.float32, shape=c_shape)

@@ -17,7 +17,7 @@ class Generator:
 
         with tf.variable_scope(self.name, reuse=tf.AUTO_REUSE):
 
-            h = tensor_in
+            h = tf.concat(tensor_in, condition) #TODO: Check if shape and everything is fine.
             h = tf.expand_dims(tf.expand_dims(tf.expand_dims(h, 1), 1), 1)
 
             # Shared network

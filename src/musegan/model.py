@@ -101,7 +101,7 @@ class Model:
                         nodes['z'], y, True, nodes['slope'])
             else:
                 if params.get('is_accompaniment'):
-                    nodes['fake_x'] = self.gen(nodes['z'], y, c, True)
+                    nodes['fake_x'] = self.gen(nodes['z'], x, c, True)
                 else:
                     nodes['fake_x'] = self.gen(nodes['z'], y, True)
 

@@ -86,6 +86,7 @@ class Discriminator:
                 h = conv_layer(h, 512, (2, 1, 1), (1, 1, 1))         # 3, 1, 1
 
             h = tf.reshape(h, (-1, h.get_shape()[-1]))
-            h = dense(h, 1)
+            h = named_dense(h, 96, 'last_dense')   #A multiple of the current beat res and key signature(4/4)
+            o = dense(h, 1)
 
-        return h
+        return o
