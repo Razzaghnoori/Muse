@@ -73,6 +73,8 @@ class Model:
 
             nodes = {}
 
+            is_conditional = config.get('is_conditional', False) #TODO: Check if is True
+
             # Get or create global step
             global_step = tf.train.get_or_create_global_step()
             nodes['gen_step'] = tf.get_variable(
@@ -86,6 +88,11 @@ class Model:
             else:
                 nodes['z'] = z
 
+            #Set default condition if not given
+            if params.get('is_conditional') and y is None:
+                with tf.variable_scope('discriminator', reuse=tf.AUTO_REUSE):
+                    nodes['condition'] = tf.get_variable('last_dense')
+
             # Get slope tensor (for straight-through estimators)
             nodes['slope'] = tf.get_variable(
                 'slope', [], tf.float32, tf.constant_initializer(1.0),
@@ -95,15 +102,19 @@ class Model:
             if params['use_binary_neurons']:
                 if params.get('is_accompaniment'):
                     nodes['fake_x'], nodes['fake_x_preactivated'] = self.gen(
-                        nodes['z'], y, c, True, nodes['slope'])
+                        nodes['z'], y, c, True, nodes['slope'],
+                        is_conditional=is_conditional)
                 else:
                     nodes['fake_x'], nodes['fake_x_preactivated'] = self.gen(
-                        nodes['z'], y, True, nodes['slope'])
+                        nodes['z'], y, True, nodes['slope'],
+                        is_conditional=is_conditional)
             else:
                 if params.get('is_accompaniment'):
-                    nodes['fake_x'] = self.gen(nodes['z'], x, c, True)
+                    nodes['fake_x'] = self.gen(nodes['z'], x, c, True, \
+                        is_conditional=is_conditional)
                 else:
-                    nodes['fake_x'] = self.gen(nodes['z'], y, True)
+                    nodes['fake_x'] = self.gen(nodes['z'], y, True, \
+                        is_conditional=is_conditional)
 
             # --- Slope annealing ----------------------------------------------
             if config['use_slope_annealing']:
@@ -214,15 +225,19 @@ class Model:
             if params['use_binary_neurons']:
                 if params.get('is_accompaniment'):
                     nodes['fake_x'], nodes['fake_x_preactivated'] = self.gen(
-                        nodes['z'], y, c, False, nodes['slope'])
+                        nodes['z'], y, c, False, nodes['slope'], 
+                        is_conditional=is_conditional)
                 else:
                     nodes['fake_x'], nodes['fake_x_preactivated'] = self.gen(
-                        nodes['z'], y, False, nodes['slope'])
+                        nodes['z'], y, False, nodes['slope'], 
+                        is_conditional=is_conditional)
             else:
                 if params.get('is_accompaniment'):
-                    nodes['fake_x'] = self.gen(nodes['z'], y, c, False)
+                    nodes['fake_x'] = self.gen(nodes['z'], y, c, False, \
+                        is_conditional=is_conditional)
                 else:
-                    nodes['fake_x'] = self.gen(nodes['z'], y, False)
+                    nodes['fake_x'] = self.gen(nodes['z'], y, False, \
+                        is_conditional=is_conditional)
 
             # ============================ Save ops ============================
             def _get_filepath(folder_name, name, suffix, ext):
