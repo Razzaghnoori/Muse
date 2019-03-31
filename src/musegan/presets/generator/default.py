@@ -16,7 +16,7 @@ class Generator:
         tconv_layer = lambda i, f, k, s: ACTIVATION(norm(tconv3d(i, f, k, s)))
 
         if is_conditional and condition is None:
-            with tf.variable_scope('discriminator', reuse=tf.AUTO_REUSE):
+            with tf.variable_scope('Discriminator', reuse=tf.AUTO_REUSE):
                 condition = tf.get_variable('last_dense', [None, 96], \
                     tf.constant_initializer(0))
 

@@ -90,7 +90,7 @@ class Model:
 
             #Set default condition if not given
             if params.get('is_conditional') and y is None:
-                with tf.variable_scope('discriminator', reuse=tf.AUTO_REUSE):
+                with tf.variable_scope('Discriminator', reuse=tf.AUTO_REUSE):
                     nodes['condition'] = tf.get_variable('last_dense')
 
             # Get slope tensor (for straight-through estimators)
@@ -216,10 +216,18 @@ class Model:
 
             nodes = {'z': z}
 
+            is_conditional = config.get('is_conditional', False) #TODO: Check if is True
+
+
             # Get slope tensor (for straight-through estimators)
             nodes['slope'] = tf.get_variable(
                 'slope', [], tf.float32, tf.constant_initializer(1.0),
                 trainable=False)
+
+            #Set default condition if not given
+            if params.get('is_conditional') and y is None:
+                with tf.variable_scope('Discriminator', reuse=tf.AUTO_REUSE):
+                    nodes['condition'] = tf.get_variable('last_dense')
 
             # --- Generator output ---------------------------------------------
             if params['use_binary_neurons']:
