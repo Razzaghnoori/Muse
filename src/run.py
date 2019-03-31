@@ -83,7 +83,6 @@ class MIDIGroup(object):
         pad_requirements = pad_requirements.reshape(-1,1)
         pad_requirements = np.hstack([np.zeros((pad_requirements.size,1)), \
             pad_requirements]).reshape(-1, n_dims, 2)
-        print(pad_requirements)
 
         #(batch_size, n_bars, n_timesteps, n_pitches, n_tracks)
         self.pianorolls = np.zeros((batch_size, *max_of_each_axis))
