@@ -16,6 +16,8 @@ class Generator:
         norm = get_normalization(NORMALIZATION, training)
         tconv_layer = lambda i, f, k, s: ACTIVATION(norm(tconv3d(i, f, k, s)))
 
+        cprint(str(is_conditional), 'red')
+        cprint(str(condition), 'red')
         if is_conditional and condition is None:
             cprint('Time to set the condition in Generator call.', 'blue')
             with tf.variable_scope('Discriminator', reuse=tf.AUTO_REUSE):
