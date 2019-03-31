@@ -82,7 +82,7 @@ class Model:
             # Get or create global step
             global_step = tf.train.get_or_create_global_step()
             nodes['gen_step'] = tf.get_variable(
-                'gen_step', [], tf.int32, tf.constant_initializer(0),
+                'gen_step', [], tf.int32, initializer=tf.constant_initializer(value=0),
                 trainable=False)
 
             # Set default latent distribution if not given
