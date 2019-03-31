@@ -4,6 +4,7 @@ import logging
 import imageio
 import numpy as np
 import tensorflow as tf
+from termcolor import cprint
 from musegan.io_utils import pianoroll_to_image, vector_to_image
 from musegan.io_utils import image_grid, save_pianoroll
 from musegan.losses import get_adv_losses
@@ -74,6 +75,7 @@ class Model:
             nodes = {}
 
             is_conditional = config.get('is_conditional', False) #TODO: Check if is True
+            cprint('is_conditional={}'.format(str(is_conditional)), 'yellow')
 
             # Get or create global step
             global_step = tf.train.get_or_create_global_step()

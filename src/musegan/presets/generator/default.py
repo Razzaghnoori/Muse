@@ -2,6 +2,7 @@
 import tensorflow as tf
 from tensorflow.nn import relu, leaky_relu, tanh, sigmoid
 from ..ops import tconv3d, get_normalization
+from termcolor import cprint
 
 NORMALIZATION = 'batch_norm' # 'batch_norm', 'layer_norm'
 ACTIVATION = relu # relu, leaky_relu, tanh, sigmoid
@@ -16,9 +17,13 @@ class Generator:
         tconv_layer = lambda i, f, k, s: ACTIVATION(norm(tconv3d(i, f, k, s)))
 
         if is_conditional and condition is None:
+            cprint('Time to set the condition in Generator call.', 'blue')
             with tf.variable_scope('Discriminator', reuse=tf.AUTO_REUSE):
                 condition = tf.get_variable('last_dense', [None, 96], \
                     tf.constant_initializer(0))
+
+                cprint(condition, 'red')
+                cprint(condition.get_shape().value, 'blue')
 
         with tf.variable_scope(self.name, reuse=tf.AUTO_REUSE):
             h = tf.concat(tensor_in, condition) #TODO: Check if shape and everything is fine.
