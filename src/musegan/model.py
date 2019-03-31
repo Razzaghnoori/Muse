@@ -74,7 +74,7 @@ class Model:
 
             nodes = {}
 
-            cprint(config, 'blue')
+            cprint(params, 'blue')
 
             is_conditional = params.get('is_conditional', False) #TODO: Check if is True
             cprint('is_conditional={}'.format(str(is_conditional)), 'yellow')
