@@ -76,7 +76,7 @@ class Model:
 
             cprint(config, 'blue')
 
-            is_conditional = config.get('is_conditional', False) #TODO: Check if is True
+            is_conditional = params.get('is_conditional', False) #TODO: Check if is True
             cprint('is_conditional={}'.format(str(is_conditional)), 'yellow')
 
             # Get or create global step
