@@ -13,6 +13,7 @@ class Generator:
         self.name = name
 
     def __call__(self, tensor_in, condition=None, training=None, slope=None, is_conditional=False):
+        batch_size = tf.shape(tensor_in)[0]
         norm = get_normalization(NORMALIZATION, training)
         tconv_layer = lambda i, f, k, s: ACTIVATION(norm(tconv3d(i, f, k, s)))
 
@@ -21,7 +22,7 @@ class Generator:
         if is_conditional and condition is None:
             cprint('Time to set the condition in Generator call.', 'blue')
             with tf.variable_scope('Discriminator', reuse=tf.AUTO_REUSE):
-                condition = tf.get_variable('last_dense', [None, 96], \
+                condition = tf.get_variable('last_dense', [batch_size, 96], \
                     tf.constant_initializer(0))
 
                 cprint(condition, 'red')
