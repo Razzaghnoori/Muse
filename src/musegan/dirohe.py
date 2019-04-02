@@ -12,22 +12,21 @@ class Dirohe(object):
     """
 
     def __init__(self, root_dir, encodings=None, \
-        filter=None, encoding_matrix_files_only=True):
+        filter_=None):
 
         self.filters = {
-            'dirs': lambda x: x.isdir(),
+            'dirs': lambda x: isdir(x),
             'midis': lambda x: x.split('.')[-1] == 'mid',
-            'files': lambda x: x.isfile(),
+            'files': lambda x: isfile(x),
             None: lambda x: True
         }
 
-        self.selected_filter = self.filters[filter]
+        self.selected_filter = self.filters[filter_]
         self.root_dir = root_dir
         self.q = list()
         self.paths = []
         self.ohe = dict()
         self.n_nodes_in_depth = dict()
-        self.encoding_matrix_files_only = encoding_matrix_files_only
         
         if encodings is None:
             self.start()
@@ -35,24 +34,26 @@ class Dirohe(object):
         else:
             self.encodings = encodings
             self.ohe = dict(
-                zip(self.get_path_list(self.encoding_matrix_files_only),
+                zip(self.get_path_list(),
                 self.encodings.tolist())
             )
 
-    def get_path_list(self, files_only=False):
+    def get_path_list(self):
         if self.paths:
             return self.paths
         
         self.paths = []
         for dir, _, files in walk(self.root_dir):
-            if not files_only:
-                self.paths.append(dir)
-            self.paths.extend([join(dir, x) for x in files])
+            if self.selected_filter(dir):
+                self.paths.append(dir.rstrip('/'))
+            self.paths.extend([join(dir, x.rstrip('/')) for x in files \
+                if self.selected_filter(join(dir, x))])
+        
         return self.paths
 
     def start(self):
         self.q.append(self.root_dir.rstrip('/'))
-        self.ohe[''] = []
+        self.ohe[''] = []    #Father of all fathers (root) should have a father.
         self.process(0)
     
     def process(self, depth):
@@ -69,7 +70,8 @@ class Dirohe(object):
         for node in nodes_in_depth:
             if not isdir(node):
                 continue
-            children = [join(node, x.rstrip('/')) for x in listdir(node)]
+            children = [join(node, x.rstrip('/')) for x in listdir(node) \
+                if self.selected_filter(join(node, x))]
             self.q.extend(children)
 
         self.process(depth+1)
@@ -82,6 +84,8 @@ class Dirohe(object):
         if isdir(me):
             for child in listdir(me):
                 child = join(me, child)
+                if not self.selected_filter(child):
+                    continue
                 self.join_encodings(child, me)
 
     def normalize_encodings(self):
@@ -90,12 +94,12 @@ class Dirohe(object):
         for k in self.ohe:
             self.ohe[k] += (max_len - len(self.ohe[k])) * [0]
 
-    def create_encoding_matrix(self, files_only=False):
+    def create_encoding_matrix(self):
         if hasattr(self, 'encodings'):
             return
         
         self.encodings = []
-        for path in self.get_path_list(files_only):
+        for path in self.get_path_list():
             ohe = self.ohe.get(path)
             if not ohe:
                 #TODO: Replace this with logging.log
@@ -115,7 +119,7 @@ class Dirohe(object):
     def end(self):
         self.join_encodings(self.root_dir, '')
         self.normalize_encodings()
-        self.create_encoding_matrix(self.encoding_matrix_files_only)
+        self.create_encoding_matrix()
 
     def encode(self, path):
         while True:

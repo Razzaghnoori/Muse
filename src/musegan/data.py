@@ -3,6 +3,7 @@
 import logging
 import numpy as np
 import tensorflow as tf
+from os.path import join
 from musegan.config import SHUFFLE_BUFFER_SIZE, PREFETCH_SIZE
 
 LOGGER = logging.getLogger(__name__)
@@ -30,6 +31,11 @@ def load_data(data_source, data_filename):
         return load_data_from_npz(data_filename)
     raise ValueError("Expect `data_source` to be one of 'sa', 'npy', 'npz'. "
                      "But get " + str(data_source))
+
+def load_conditions(path):
+    base_path = 'data'
+    full_path = join(base_path, '{}_labels'.format(path))
+    return np.load(full_path)
 
 # --- Dataset Utilities -------------------------------------------------------
 def random_transpose(pianoroll):

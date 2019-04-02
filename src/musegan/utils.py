@@ -8,7 +8,7 @@ import yaml
 from musegan.config import FILE_LOGLEVEL, FILE_LOG_FORMAT
 from dirohe import Dirohe
 
-dir_ohe = Dirohe('../../midi_dataset/')
+dir_ohe = Dirohe('../../midi_dataset/', filter_='dirs')
 
 # --- Path utilities -----------------------------------------------------------
 def make_sure_path_exists(path):

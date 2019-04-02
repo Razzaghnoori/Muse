@@ -114,7 +114,7 @@ class Model:
                         is_conditional=is_conditional)
             else:
                 if params.get('is_accompaniment'):
-                    nodes['fake_x'] = self.gen(nodes['z'], x, c, True, \
+                    nodes['fake_x'] = self.gen(nodes['z'], y, x, c, True, \
                         is_conditional=is_conditional)
                 else:
                     nodes['fake_x'] = self.gen(nodes['z'], y, True, \

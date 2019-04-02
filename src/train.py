@@ -6,8 +6,9 @@ from pprint import pformat
 import numpy as np
 import scipy.stats
 import tensorflow as tf
+from colored import cprint
 from musegan.config import LOGLEVEL, LOG_FORMAT
-from musegan.data import load_data, get_dataset, get_samples
+from musegan.data import load_data, get_dataset, get_samples, load_conditions
 from musegan.metrics import get_save_metric_ops
 from musegan.model import Model
 from musegan.utils import make_sure_path_exists, load_yaml
@@ -95,6 +96,7 @@ def load_training_data(params, config):
 
     if params['is_conditional']:
         labels = load_conditions(config['data_filename'])
+        cprint("Labels' shape:" + str(labels.shape), 'yellow')
     else:
         labels = None
 
@@ -176,7 +178,7 @@ def main():
 
     # ================================== Data ==================================
     # Load training data
-    train_x, _ = load_training_data(params, config)
+    train_x, train_y = load_training_data(params, config)
 
     # ================================= Model ==================================
     # Build model
@@ -185,10 +187,10 @@ def main():
         train_c = tf.expand_dims(
             train_x[..., params.get('condition_track_idx')], -1)
         train_nodes = model(
-            x=train_x, c=train_c, mode='train', params=params, config=config)
+            x=train_x, y=train_y, c=train_c, mode='train', params=params, config=config)
     else:
         train_nodes = model(
-            x=train_x, mode='train', params=params, config=config)
+            x=train_x, y=train_y, mode='train', params=params, config=config)
 
     # Log number of parameters in the model
     def get_n_params(var_list):

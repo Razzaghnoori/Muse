@@ -18,15 +18,7 @@ class Generator:
         tconv_layer = lambda i, f, k, s: ACTIVATION(norm(tconv3d(i, f, k, s)))
 
         cprint(str(is_conditional), 'red')
-        cprint(str(condition), 'red')
-        if is_conditional and condition is None:
-            cprint('Time to set the condition in Generator call.', 'blue')
-            with tf.variable_scope('Discriminator', reuse=tf.AUTO_REUSE):
-                condition = tf.get_variable('last_dense', [batch_size, 96], \
-                    tf.constant_initializer(0))
-
-                cprint(condition, 'red')
-                cprint(condition.get_shape().value, 'blue')
+        cprint(condition.get_shape().value, 'blue')
 
         with tf.variable_scope(self.name, reuse=tf.AUTO_REUSE):
             h = tf.concat(tensor_in, condition) #TODO: Check if shape and everything is fine.

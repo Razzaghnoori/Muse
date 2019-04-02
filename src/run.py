@@ -6,6 +6,7 @@ from os.path import join
 from pypianoroll import Multitrack
 from strategies import map_to_closest
 from musegan.utils import load_yaml
+from musegan.dirohe import Dirohe
 
 def npz_to_midi(npz_path, midi_path):
     Multitrack(npz_path).write(midi_path)
@@ -47,9 +48,16 @@ class MIDI(object):
 
 class MIDIGroup(object):
     def __init__(self, midi_list=None, midi_dir=None, \
-        config_path='./exp/default/config.yaml'):
+        config_path='./src/musegan/default_config.yaml', has_labels=True):
         self.list_midis = []
         self.config = load_yaml(config_path)
+        self.has_labels = has_labels
+        
+        if self.has_labels:
+            if not midi_dir:
+                raise Exception('Must provide midi_dir when expecting labels.')
+            self.dirohe = Dirohe(midi_dir, filter_='dirs')
+            self.labels = []
 
         if midi_list is not None:
             self.list_midis = midi_list
@@ -63,9 +71,16 @@ class MIDIGroup(object):
                         midi_path = join(dir, x)
                         midi = self._get_normalized_MIDI(midi_path)
                         self.list_midis.append(midi)
+
+                        if self.has_labels:
+                            label = self.dirohe.encode(midi_path)
+                            self.labels.append(label)
+
                     except:
                         print('Crap')
+
             self.list_pianorolls = [x.pianoroll for x in self.list_midis]
+            self.labels = np.array(self.labels)
 
     def _get_normalized_MIDI(self, midi_path):
         midi = MIDI(midi_path)
@@ -94,8 +109,15 @@ class MIDIGroup(object):
                 pad_requirements[i].astype(int), mode='constant') 
 
     def export(self, exp_path):
-        self._generate_pianoroll()
-        np.savez_compressed(
-            exp_path, nonzero=np.array(self.pianorolls.nonzero()),
-            shape=self.pianorolls.shape)
-        print('Successfully created a compressed dataset of Midi files.')
+        try:
+            self._generate_pianoroll()
+            np.savez_compressed(
+                exp_path, nonzero=np.array(self.pianorolls.nonzero()),
+                shape=self.pianorolls.shape)
+
+            if self.has_labels:
+                np.save(exp_path + 'labels', self.labels)
+            
+            print('Successfully created a compressed dataset of Midi files.')
+        except:
+            print('Export failed.')
