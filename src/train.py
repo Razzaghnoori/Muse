@@ -81,6 +81,10 @@ def setup():
 
     return params, config
 
+
+    conditions = np.array(conditions)
+    return conditions
+
 def load_training_data(params, config):
     """Load and return the training data."""
     
@@ -90,7 +94,7 @@ def load_training_data(params, config):
     LOGGER.info("Training data size: %d", len(data))
 
     if params['is_conditional']:
-        lables = None    #TODO: Condition received from discriminator's flatten layer should be here. Shape must conform with data
+        labels = load_conditions(config['data_filename'])
     else:
         labels = None
 
@@ -151,6 +155,7 @@ def load_or_create_samples(params, config):
         if resample:
             LOGGER.info("Drawing new sample_x.")
             data = load_data(config['data_source'], config['data_filename'])
+            conditions = load_conditions()
             sample_x = get_samples(
                 np.prod(config['sample_grid']), data,
                 use_random_transpose = config['use_random_transpose'])
