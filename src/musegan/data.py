@@ -24,7 +24,7 @@ def load_data(data_source, data_filename):
     """Load and return the training data."""
     if data_source == 'sa':
         import SharedArray as sa
-        return sa.attach(data_filename)
+        return sa.attach(join('../data/', data_filename))
     if data_source == 'npy':
         return load_data_from_npy(data_filename)
     if data_source == 'npz':
@@ -34,7 +34,7 @@ def load_data(data_source, data_filename):
 
 def load_conditions(path):
     base_path = 'data'
-    full_path = join(base_path, '{}_labels'.format(path))
+    full_path = join('..', base_path, '{}_labels'.format(path))
     return np.load(full_path)
 
 # --- Dataset Utilities -------------------------------------------------------
