@@ -24,7 +24,7 @@ def load_data(data_source, data_filename):
     """Load and return the training data."""
     if data_source == 'sa':
         import SharedArray as sa
-        return sa.attach(join('../data/', data_filename))
+        return sa.attach(data_filename)
     if data_source == 'npy':
         return load_data_from_npy(data_filename)
     if data_source == 'npz':
