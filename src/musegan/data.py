@@ -37,7 +37,7 @@ def load_data(data_source, data_filename):
 
 def load_conditions(path):
     base_path = 'data'
-    full_path = pkg_resources.resourse_filename(base_path, 'train_labels.npy')
+    full_path = join('..', '..', base_path, 'train_labels.npy')
 
     cprint('The fuuuuucking current directory: ' + os.getcwd(), 'green')
     cprint('The fucking full path:' + full_path, 'green')
