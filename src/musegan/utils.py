@@ -6,7 +6,6 @@ import logging
 import importlib
 import yaml
 from musegan.config import FILE_LOGLEVEL, FILE_LOG_FORMAT
-from dirohe import Dirohe
 
 # --- Path utilities -----------------------------------------------------------
 def make_sure_path_exists(path):
