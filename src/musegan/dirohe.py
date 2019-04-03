@@ -133,6 +133,11 @@ class Dirohe(object):
 
             path = path[:sep_ind]
         
+    def get_random_encodings(self, shape):
+        size = np.prod(shape)
+        inds = np.random.randint(0, len(self.ohe), size)
+        encodings = self.encodings[inds]
+        return encodings.reshape(shape)
 
 
 

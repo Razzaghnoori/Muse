@@ -10,6 +10,8 @@ from musegan.config import LOGLEVEL, LOG_FORMAT
 from musegan.data import load_data, get_samples
 from musegan.model import Model
 from musegan.utils import make_sure_path_exists, load_yaml, update_not_none
+from musegan.dirohe import Dirohe
+
 LOGGER = logging.getLogger("musegan.inference")
 
 def parse_arguments():
@@ -76,11 +78,23 @@ def main():
     LOGGER.info("Using parameters:\n%s", pformat(params))
     LOGGER.info("Using configurations:\n%s", pformat(config))
 
+    dirohe = Dirohe('midi_dataset')
+    print(dirohe.encode('midi_dataset/hip_hop/pitbull'))
+
+    condition_path = input('Condition: ')
+    condition = dirohe.encode(condition_path)
+
+    if condition.ndim == 1:
+        condition = condition.reshape(-1, condition.size)
+
+
     # ============================== Placeholders ==============================
     placeholder_x = tf.placeholder(
         tf.float32, shape=([None] + params['data_shape']))
     placeholder_z = tf.placeholder(
         tf.float32, shape=(None, params['latent_dim']))
+    placeholder_y = tf.placeholder(
+        tf.float32, shape=(None, condition.shape[-1]))
     placeholder_c = tf.placeholder(
         tf.float32, shape=([None] + params['data_shape'][:-1] + [1]))
     placeholder_suffix = tf.placeholder(tf.string)
@@ -100,17 +114,17 @@ def main():
     model = Model(params)
     if params.get('is_accompaniment'):
         _ = model(
-            x=placeholder_x, c=placeholder_c, z=placeholder_z, mode='train',
-            params=params, config=config)
+            x=placeholder_x, y=placeholder_y, c=placeholder_c, z=placeholder_z,
+            mode='train', params=params, config=config)
         predict_nodes = model(
-            c=placeholder_c, z=placeholder_z, mode='predict', params=params,
-            config=sampler_config)
+            c=placeholder_c, y=placeholder_y, z=placeholder_z, mode='predict',
+            params=params, config=sampler_config)
     else:
         _ = model(
-            x=placeholder_x, z=placeholder_z, mode='train', params=params,
-            config=config)
+            x=placeholder_x, y=placeholder_y, z=placeholder_z, mode='train', 
+            params=params, config=config)
         predict_nodes = model(
-            z=placeholder_z, mode='predict', params=params,
+            z=placeholder_z, y=placeholder_y, mode='predict', params=params,
             config=sampler_config)
 
     # Get sampler op
@@ -145,15 +159,18 @@ def main():
 
         # Run sampler op
         for i in range(config['runs']):
-            feed_dict_sampler = {
-                placeholder_z: scipy.stats.truncnorm.rvs(
+            sample_z = scipy.stats.truncnorm.rvs(
                     config['lower'], config['upper'], size=(
                         (config['rows'] * config['columns']),
-                        params['latent_dim'])),
+                        params['latent_dim']))
+            
+            feed_dict_sampler = {
+                placeholder_z: sample_z,
+                placeholder_y: np.tile(condition, (1, sample_z.shape[-1])),
                 placeholder_suffix: str(i)}
             if params.get('is_accompaniment'):
                 sample_x = get_samples(
-                    (config['rows'] * config['columns']), data,
+                    (config['rows'] * ['columns']), data,
                     use_random_transpose=config['use_random_transpose'])
                 feed_dict_sampler[placeholder_c] = np.expand_dims(
                     sample_x[..., params['condition_track_idx']], -1)

@@ -7,6 +7,7 @@ import numpy as np
 import scipy.stats
 import tensorflow as tf
 from termcolor import cprint
+from musegan.dirohe import Dirohe
 from musegan.config import LOGLEVEL, LOG_FORMAT
 from musegan.data import load_data, get_dataset, get_samples, load_conditions
 from musegan.metrics import get_save_metric_ops
@@ -14,6 +15,8 @@ from musegan.model import Model
 from musegan.utils import make_sure_path_exists, load_yaml
 from musegan.utils import backup_src, update_not_none, setup_loggers
 LOGGER = logging.getLogger("musegan.train")
+
+dirohe = Dirohe('midi_dataset')
 
 def parse_arguments():
     """Parse and return the command line arguments."""
@@ -95,7 +98,7 @@ def load_training_data(params, config):
     LOGGER.info("Training data size: %d", len(data))
 
     if params['is_conditional']:
-        labels = load_conditions(config['data_filename']).tolist()
+        labels = load_conditions(config['data_filename'])
         cprint("Labels' shape:" + str(labels.shape), 'yellow')
     else:
         labels = None
@@ -103,7 +106,7 @@ def load_training_data(params, config):
     # Build dataset
     LOGGER.info("Building dataset.")
     dataset = get_dataset(
-        data, labels, config['batch_size'], params['data_shape'],
+        data, labels.tolist(), config['batch_size'], params['data_shape'],
         config['use_random_transpose'], config['n_jobs'])
 
     # Create iterator
@@ -346,7 +349,7 @@ def main():
 
                 eval_sample_z = scipy.stats.truncnorm.rvs(-2, 2, size=(np.prod(config['sample_grid']), params['latent_dim']))
 
-                eval_sample_y = np.zeros((eval_sample_z.shape[0], sample_y.shape[1])) #TODO: Generate random dir-ohe later
+                eval_sample_y = dirohe.get_random_encodings((eval_sample_z.shape[0], sample_y.shape[1])) #TODO: Generate random dir-ohe later
 
                 feed_dict_evaluation = {
                     placeholder_z: eval_sample_z,
