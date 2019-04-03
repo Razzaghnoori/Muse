@@ -3,6 +3,9 @@
 import logging
 import numpy as np
 import tensorflow as tf
+import os
+
+from termcolor import cprint
 from os.path import join
 from musegan.config import SHUFFLE_BUFFER_SIZE, PREFETCH_SIZE
 
@@ -34,8 +37,15 @@ def load_data(data_source, data_filename):
 
 def load_conditions(path):
     base_path = 'data'
-    full_path = join('..', base_path, '{}_labels'.format(path))
-    return np.load('../data/train_labels.npy')
+    full_path = pkg_resources.resourse_filename(base_path, 'train_labels.npy')
+
+    cprint('The fuuuuucking current directory: ' + os.getcwd(), 'green')
+    cprint('The fucking full path:' + full_path, 'green')
+    cprint('The fucking full path exists?' + os.path.exists(full_path), 'green')
+
+    conditions = np.load(full_path)
+    print(conditions)
+    return conditions
 
 # --- Dataset Utilities -------------------------------------------------------
 def random_transpose(pianoroll):
