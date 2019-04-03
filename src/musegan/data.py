@@ -122,7 +122,7 @@ def get_dataset(data, labels=None, batch_size=None, data_shape=None,
         assert len(data) == len(labels), (
             "Lengths of `data` and `lables` do not match.")
         dataset = tf.data.Dataset.from_generator(
-            lambda: _gen_data(data, labels), [tf.float32, tf.int32])
+            lambda: _gen_data(data, labels), (tf.float32, tf.int32))
         if use_random_transpose:
             dataset = dataset.map(
                 lambda pianoroll, label: (
