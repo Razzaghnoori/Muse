@@ -116,7 +116,7 @@ class MIDIGroup(object):
                 shape=self.pianorolls.shape)
 
             if self.has_labels:
-                np.save(exp_path + 'labels', self.labels)
+                np.save(exp_path + '_labels', self.labels)
             
             print('Successfully created a compressed dataset of Midi files.')
         except:
