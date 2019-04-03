@@ -41,7 +41,7 @@ def load_conditions(path):
 
     cprint('The fuuuuucking current directory: ' + os.getcwd(), 'green')
     cprint('The fucking full path:' + full_path, 'green')
-    cprint('The fucking full path exists?' + os.path.exists(full_path), 'green')
+    cprint('The fucking full path exists?' + str(os.path.exists(full_path)), 'green')
 
     conditions = np.load(full_path)
     print(conditions)
