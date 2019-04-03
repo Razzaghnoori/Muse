@@ -35,7 +35,7 @@ def load_data(data_source, data_filename):
 def load_conditions(path):
     base_path = 'data'
     full_path = join('..', base_path, '{}_labels'.format(path))
-    return np.load(full_path)
+    return np.load('../data/train_labels.npy')
 
 # --- Dataset Utilities -------------------------------------------------------
 def random_transpose(pianoroll):
