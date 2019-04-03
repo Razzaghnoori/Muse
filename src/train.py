@@ -6,7 +6,7 @@ from pprint import pformat
 import numpy as np
 import scipy.stats
 import tensorflow as tf
-from colored import cprint
+from termcolor import cprint
 from musegan.config import LOGLEVEL, LOG_FORMAT
 from musegan.data import load_data, get_dataset, get_samples, load_conditions
 from musegan.metrics import get_save_metric_ops
