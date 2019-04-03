@@ -82,7 +82,7 @@ def main():
     print(dirohe.encode('midi_dataset/hip_hop/pitbull'))
 
     condition_path = input('Condition: ')
-    condition = dirohe.encode(condition_path)
+    condition = np.array(dirohe.encode(condition_path))
 
     if condition.ndim == 1:
         condition = condition.reshape(-1, condition.size)

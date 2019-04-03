@@ -88,6 +88,10 @@ def get_samples(n_samples, data, labels=None, use_random_transpose=False):
 # --- Tensorflow Dataset -------------------------------------------------------
 def _gen_data(data, labels=None):
     """Data Generator."""
+
+    cprint('Data type is:' + type(data), 'yellow')
+    cprint('labels type is:' + type(labels), 'yellow')
+
     if labels is None:
         for item in data:
             if np.issubdtype(data.dtype, np.bool_):
