@@ -95,7 +95,7 @@ def load_training_data(params, config):
     LOGGER.info("Training data size: %d", len(data))
 
     if params['is_conditional']:
-        labels = load_conditions(config['data_filename'])
+        labels = load_conditions(config['data_filename']).tolist()
         cprint("Labels' shape:" + str(labels.shape), 'yellow')
     else:
         labels = None
