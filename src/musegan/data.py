@@ -39,9 +39,9 @@ def load_conditions(path):
     base_path = 'data'
     full_path = join('..', '..', base_path, 'train_labels.npy')
 
-    cprint('The fuuuuucking current directory: ' + os.getcwd(), 'green')
-    cprint('The fucking full path:' + full_path, 'green')
-    cprint('The fucking full path exists?' + str(os.path.exists(full_path)), 'green')
+    print('The fuuuuucking current directory: ' + os.getcwd())
+    print('The fucking full path:' + full_path, 'green')
+    print('The fucking full path exists?' + str(os.path.exists(full_path)), 'green')
 
     conditions = np.load(full_path)
     print(conditions)
