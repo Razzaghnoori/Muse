@@ -25,6 +25,12 @@ def load_data_from_npz(filename):
 
 def load_data(data_source, data_filename):
     """Load and return the training data."""
+    print('****** Current working directory is', os.getcwd())
+    print('Exists: data/train.npz', str(os.path.exists('data/train.npz')))
+    print('Exists: ../data/train.npz', str(os.path.exists('../data/train.npz')))
+    print('Exists: ../../data/train.npz', str(os.path.exists('../../data/train.npz')))
+    print('Exists: data/', str(os.path.exists('data/')))
+    
     if data_source == 'sa':
         import SharedArray as sa
         return sa.attach(data_filename)
