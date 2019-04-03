@@ -223,8 +223,8 @@ def main():
 
         # Get prediction nodes
         placeholder_z = tf.placeholder(tf.float32, shape=sample_z.shape)
-        with tf.variable_scope('Discriminator', reuse=tf.AUTO_REUSE):
-            placeholder_y = tf.get_variable('last_dense')   #Parameterize this
+        placeholder_y = tf.placeholder(tf.float32, shape=sample_y.shape)
+        
         if params.get('is_accompaniment'):
             c_shape = np.append(sample_x.shape[:-1], 1)
             placeholder_c = tf.placeholder(tf.float32, shape=c_shape)
@@ -325,7 +325,11 @@ def main():
             if ((config['save_samples_steps'] > 0)
                     and (step % config['save_samples_steps'] == 0)):
                 LOGGER.info("Running sampler")
-                feed_dict_sampler = {placeholder_z: sample_z}
+                feed_dict_sampler = {
+                    placeholder_z: sample_z,
+                    placeholder_y: sample_y
+                }
+
                 if params.get('is_accompaniment'):
                     feed_dict_sampler[placeholder_c] = np.expand_dims(
                         sample_x[..., params.get('condition_track_idx')], -1)
@@ -339,9 +343,17 @@ def main():
             if ((config['evaluate_steps'] > 0)
                     and (step % config['evaluate_steps'] == 0)):
                 LOGGER.info("Running evaluation")
+
+                eval_sample_z = scipy.stats.truncnorm.rvs(-2, 2, \ 
+                    size=(np.prod(config['sample_grid']), \
+                        params['latent_dim']))
+
+                eval_sample_y = np.zeros((eval_sample_z.shape[0], sample_y.shape[1])) #TODO: Generate random dir-ohe later
+
                 feed_dict_evaluation = {
-                    placeholder_z: scipy.stats.truncnorm.rvs(-2, 2, size=(
-                        np.prod(config['sample_grid']), params['latent_dim']))}
+                    placeholder_z: eval_sample_z,
+                    placeholder_y: eval_sample_y
+                }
                 if params.get('is_accompaniment'):
                     feed_dict_evaluation[placeholder_c] = np.expand_dims(
                         sample_x[..., params.get('condition_track_idx')], -1)
