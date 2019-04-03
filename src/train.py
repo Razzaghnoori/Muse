@@ -344,9 +344,7 @@ def main():
                     and (step % config['evaluate_steps'] == 0)):
                 LOGGER.info("Running evaluation")
 
-                eval_sample_z = scipy.stats.truncnorm.rvs(-2, 2, \ 
-                    size=(np.prod(config['sample_grid']), \
-                        params['latent_dim']))
+                eval_sample_z = scipy.stats.truncnorm.rvs(-2, 2, size=(np.prod(config['sample_grid']), params['latent_dim']))
 
                 eval_sample_y = np.zeros((eval_sample_z.shape[0], sample_y.shape[1])) #TODO: Generate random dir-ohe later
 
