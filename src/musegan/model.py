@@ -94,8 +94,7 @@ class Model:
 
             #Set default condition if not given
             if params.get('is_conditional') and y is None:
-                with tf.variable_scope('Discriminator', reuse=tf.AUTO_REUSE):
-                    nodes['condition'] = tf.get_variable('last_dense')
+                cprint('Y IS NON FOR GOD SAKE', 'red')
 
             # Get slope tensor (for straight-through estimators)
             nodes['slope'] = tf.get_variable(
