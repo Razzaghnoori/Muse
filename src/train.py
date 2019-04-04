@@ -176,7 +176,7 @@ def load_or_create_samples(params, config):
             else:
                 sample_x = get_samples(
                     np.prod(config(['sample_grid']), data,
-                    use_random_transpose = config['use_random_transpose'])
+                    use_random_transpose = config['use_random_transpose']))
                 
             np.save(sample_x_path, sample_x)
     else:
