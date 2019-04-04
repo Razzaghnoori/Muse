@@ -166,7 +166,7 @@ def main():
             
             feed_dict_sampler = {
                 placeholder_z: sample_z,
-                placeholder_y: np.tile(condition, (1, sample_z.shape[-1])),
+                placeholder_y: np.tile(condition, (sample_z.shape[0], 1)),
                 placeholder_suffix: str(i)}
             if params.get('is_accompaniment'):
                 sample_x = get_samples(
