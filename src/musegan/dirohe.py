@@ -64,7 +64,7 @@ class Dirohe(object):
         self.n_nodes_in_depth[depth] = len(self.q)
         self.q = []
 
-        encodings = np.eye(len(nodes_in_depth), dtype=int).tolist()
+        encodings = np.eye(len(nodes_in_depth)).tolist()
         self.ohe.update(dict(zip(nodes_in_depth, encodings)))
 
         for node in nodes_in_depth:
