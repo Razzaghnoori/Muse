@@ -137,7 +137,7 @@ class Dirohe(object):
         
     def get_random_encodings(self, shape):
         size = np.prod(shape)
-        inds = np.random.randint(0, len(self.ohe), size)
+        inds = np.random.randint(0, self.encodings.shape[0], size)
         encodings = self.encodings[inds]
         return encodings.reshape(shape)
 
