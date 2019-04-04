@@ -100,6 +100,7 @@ def load_training_data(params, config):
     if params['is_conditional']:
         labels = load_conditions(config['data_filename'])
         cprint("Labels' shape:" + str(labels.shape), 'yellow')
+        cprint("Data's shape:" + str(data.shape), 'yellow')
     else:
         labels = None
 
