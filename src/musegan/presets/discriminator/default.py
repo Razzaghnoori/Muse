@@ -1,7 +1,7 @@
 """This file defines the network architecture for the discriminator."""
 import tensorflow as tf
 from tensorflow.nn import relu, leaky_relu, tanh, sigmoid
-from ..ops import dense, conv3d, get_normalization
+from ..ops import dense, named_dense, conv3d, get_normalization
 
 NORMALIZATION = None # 'batch_norm', 'layer_norm', None
 ACTIVATION = leaky_relu # relu, leaky_relu, tanh, sigmoid
