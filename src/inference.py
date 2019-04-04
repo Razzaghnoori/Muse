@@ -94,7 +94,7 @@ def main():
     placeholder_z = tf.placeholder(
         tf.float32, shape=(None, params['latent_dim']))
     placeholder_y = tf.placeholder(
-        tf.int32, shape=(None, condition.shape[-1]))    #Remember
+        tf.float32, shape=(None, condition.shape[-1]))    #Remember
     placeholder_c = tf.placeholder(
         tf.float32, shape=([None] + params['data_shape'][:-1] + [1]))
     placeholder_suffix = tf.placeholder(tf.string)
