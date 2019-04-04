@@ -128,8 +128,8 @@ def get_dataset(data, labels=None, batch_size=None, data_shape=None,
                 num_parallel_calls=num_threads)
         dataset = dataset.map(
             lambda pianoroll, label: (set_pianoroll_shape(
-                pianoroll, data_shape), set_label_shape(label, labels_shape),
-                num_parallel_calls=num_threads))
+                pianoroll, data_shape), set_label_shape(label, labels_shape)),
+                num_parallel_calls=num_threads)
 
     dataset = dataset.shuffle(SHUFFLE_BUFFER_SIZE).repeat().batch(batch_size)
     return dataset.prefetch(PREFETCH_SIZE)
