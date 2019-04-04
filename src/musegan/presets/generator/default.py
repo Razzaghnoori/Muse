@@ -18,6 +18,7 @@ class Generator:
         tconv_layer = lambda i, f, k, s: ACTIVATION(norm(tconv3d(i, f, k, s)))
 
         cprint(condition.get_shape(), 'blue')
+        cprint(tensor_in.get_shape(), 'blue')
 
         with tf.variable_scope(self.name, reuse=tf.AUTO_REUSE):
             h = tf.concat(tensor_in, condition) #TODO: Check if shape and everything is fine.
