@@ -258,7 +258,7 @@ def main():
 
         # Get prediction nodes
         placeholder_z = tf.placeholder(tf.float32, shape=sample_z.shape)
-        placeholder_y = tf.placeholder(tf.int32, shape=sample_y.shape)
+        placeholder_y = tf.placeholder(tf.float32, shape=sample_y.shape)
         
         if params.get('is_accompaniment'):
             c_shape = np.append(sample_x.shape[:-1], 1)
