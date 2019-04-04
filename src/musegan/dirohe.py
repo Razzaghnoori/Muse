@@ -90,6 +90,8 @@ class Dirohe(object):
 
     def normalize_encodings(self):
         max_len = max([len(self.ohe[k]) for k in self.ohe])
+        
+        self.dim = max_len
 
         for k in self.ohe:
             self.ohe[k] += (max_len - len(self.ohe[k])) * [0]

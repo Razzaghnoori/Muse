@@ -193,7 +193,7 @@ def load_or_create_samples(params, config):
         
         if resample:
             LOGGER.info("Drawing new sample_y.")
-            sample_y = dirohe.get_random_encodings((np.prod(config['sample_grid']), -1))
+            sample_y = dirohe.get_random_encodings((np.prod(config['sample_grid']), dirohe.dim))
 
             make_sure_path_exists(config['model_dir'])            
             np.save(sample_y_path, sample_y)
