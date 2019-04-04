@@ -163,7 +163,7 @@ def load_or_create_samples(params, config):
             data = load_data(config['data_source'], config['data_filename'])
             conditions = load_conditions()
             sample_x = get_samples(
-                np.prod(config['sample_grid']), data,
+                np.prod(config['sample_grid']), data, labels=conditions,
                 use_random_transpose = config['use_random_transpose'])
             make_sure_path_exists(config['model_dir'])
             np.save(sample_x_path, sample_x)
