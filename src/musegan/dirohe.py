@@ -139,7 +139,7 @@ class Dirohe(object):
         size = np.prod(shape)
         inds = np.random.randint(0, self.encodings.shape[0], size)
         encodings = self.encodings[inds]
-        return encodings.reshape(shape)
+        return encodings.reshape(list(shape).append(self.dim))
 
 
 
