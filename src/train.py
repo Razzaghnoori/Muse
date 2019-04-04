@@ -123,6 +123,8 @@ def load_or_create_samples(params, config):
     # Load sample_z
     LOGGER.info("Loading sample_z.")
     sample_z_path = os.path.join(config['model_dir'], 'sample_z.npy')
+    sample_y_path = os.path.join(config['model_dir'], 'sample_y.npy')
+    
     if os.path.exists(sample_z_path):
         sample_z = np.load(sample_z_path)
         if sample_z.shape[1] != params['latent_dim']:
@@ -147,7 +149,7 @@ def load_or_create_samples(params, config):
         # Load sample_x
         LOGGER.info("Loading sample_x.")
         sample_x_path = os.path.join(config['model_dir'], 'sample_x.npy')
-        sample_y_path = os.path.join(config['model_dir'], 'sample_y.npy')
+
 
         if os.path.exists(sample_x_path):
             sample_x = np.load(sample_x_path)
