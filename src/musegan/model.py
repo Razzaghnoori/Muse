@@ -74,8 +74,6 @@ class Model:
 
             nodes = {}
 
-            cprint(params, 'blue')
-
             is_conditional = params.get('is_conditional', False) #TODO: Check if is True
             cprint('is_conditional={}'.format(str(is_conditional)), 'yellow')
 
@@ -94,7 +92,7 @@ class Model:
 
             #Set default condition if not given
             if params.get('is_conditional') and y is None:
-                cprint('Y IS NON FOR GOD SAKE', 'red')
+                cprint('Y IS NONE FOR GOD SAKE', 'red')
 
             # Get slope tensor (for straight-through estimators)
             nodes['slope'] = tf.get_variable(

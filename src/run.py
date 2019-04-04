@@ -78,6 +78,7 @@ class MIDIGroup(object):
 
                     except:
                         print('Crap')
+                        continue
 
             self.list_pianorolls = [x.pianoroll for x in self.list_midis]
             self.labels = np.array(self.labels)

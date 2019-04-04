@@ -17,7 +17,6 @@ class Generator:
         norm = get_normalization(NORMALIZATION, training)
         tconv_layer = lambda i, f, k, s: ACTIVATION(norm(tconv3d(i, f, k, s)))
 
-        cprint(str(is_conditional), 'red')
         cprint(condition.get_shape(), 'blue')
 
         with tf.variable_scope(self.name, reuse=tf.AUTO_REUSE):

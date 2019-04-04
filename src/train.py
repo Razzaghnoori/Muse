@@ -106,7 +106,7 @@ def load_training_data(params, config):
     # Build dataset
     LOGGER.info("Building dataset.")
     dataset = get_dataset(
-        data, labels.tolist(), config['batch_size'], params['data_shape'],
+        data, labels, config['batch_size'], params['data_shape'],
         config['use_random_transpose'], config['n_jobs'])
 
     # Create iterator
@@ -182,6 +182,9 @@ def main():
     # ================================== Data ==================================
     # Load training data
     train_x, train_y = load_training_data(params, config)
+
+    print('Train_y is:', train_y)
+    print('Train_y shape:', train_y.shape)
 
     # ================================= Model ==================================
     # Build model

@@ -25,11 +25,6 @@ def load_data_from_npz(filename):
 
 def load_data(data_source, data_filename):
     """Load and return the training data."""
-    print('****** Current working directory is', os.getcwd())
-    print('Exists: data/train.npz', str(os.path.exists('data/train.npz')))
-    print('Exists: ../data/train.npz', str(os.path.exists('../data/train.npz')))
-    print('Exists: ../../data/train.npz', str(os.path.exists('../../data/train.npz')))
-    print('Exists: data/', str(os.path.exists('data/')))
     
     if data_source == 'sa':
         import SharedArray as sa
@@ -46,7 +41,6 @@ def load_conditions(path):
     full_path = join(base_path, 'train_labels.npy')
 
     conditions = np.load(full_path)
-    print(conditions)
     return conditions
 
 # --- Dataset Utilities -------------------------------------------------------
