@@ -142,10 +142,13 @@ def load_or_create_samples(params, config):
         make_sure_path_exists(config['model_dir'])
         np.save(sample_z_path, sample_z)
 
+
     if params.get('is_accompaniment'):
         # Load sample_x
         LOGGER.info("Loading sample_x.")
         sample_x_path = os.path.join(config['model_dir'], 'sample_x.npy')
+        sample_y_path = os.path.join(config['model_dir'], 'sample_y.npy')
+
         if os.path.exists(sample_x_path):
             sample_x = np.load(sample_x_path)
             if sample_x.shape[1:] != params['data_shape']:
@@ -161,16 +164,39 @@ def load_or_create_samples(params, config):
         if resample:
             LOGGER.info("Drawing new sample_x.")
             data = load_data(config['data_source'], config['data_filename'])
-            conditions = load_conditions()
-            sample_x = get_samples(
-                np.prod(config['sample_grid']), data, labels=conditions,
-                use_random_transpose = config['use_random_transpose'])
+
             make_sure_path_exists(config['model_dir'])
+
+            if params.get('is_conditional'):
+                conditions = load_conditions('data/train_labels.npy')
+                sample_x, sample_y = get_samples(
+                    np.prod(config['sample_grid']), data, labels=conditions,
+                    use_random_transpose = config['use_random_transpose'])
+                np.save(sample_y_path, sample_y)
+            else:
+                sample_x = get_samples(
+                    np.prod(config(['sample_grid']), data,
+                    use_random_transpose = config['use_random_transpose'])
+                
             np.save(sample_x_path, sample_x)
     else:
         sample_x = None
+        #Time to load sample_y. Shall we?
+        resample = False
+        if os.path.exists(sample_y_path):
+            sample_y = np.load(sample_y_path)
+        else:
+            LOGGER.info("File for sample_y not found")
+            resample = True
+        
+        if resample:
+            LOGGER.info("Drawing new sample_y.")
+            sample_y = dirohe.get_random_encodings((np.prod(config['sample_grid']), -1))
 
-    return sample_x, None, sample_z
+            make_sure_path_exists(config['model_dir'])            
+            np.save(sample_y_path, sample_y)
+
+    return sample_x, sample_y, sample_z
 
 def main():
     """Main function."""
