@@ -14,7 +14,7 @@ use_train_test_split: false # split the piano-rolls at training
 
 # Training
 steps: 50000
-batch_size: 64
+batch_size: 8
 n_dis_updates_per_gen_update: 5
 
 # Optimizers
