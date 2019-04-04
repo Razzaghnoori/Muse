@@ -108,7 +108,8 @@ def load_training_data(params, config):
     LOGGER.info("Building dataset.")
     dataset = get_dataset(
         data, labels, config['batch_size'], params['data_shape'],
-        config['use_random_transpose'], config['n_jobs'])
+        config['use_random_transpose'], config['n_jobs'], 
+        labels_shape=(config['batch_size'], dirohe.dim))
 
     # Create iterator
     if params['is_conditional']:

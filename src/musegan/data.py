@@ -60,9 +60,10 @@ def set_pianoroll_shape(pianoroll, data_shape):
     pianoroll.set_shape(data_shape)
     return pianoroll
 
-def set_label_shape(label):
+def set_label_shape(label, shape):
     """Set the label shape and return the label."""
-    label.set_shape([1])
+    if shape:
+        label.set_shape(shape)
     return label
 
 # --- Sampler ------------------------------------------------------------------
@@ -100,7 +101,7 @@ def _gen_data(data, labels=None):
                 yield (item, labels[i])
 
 def get_dataset(data, labels=None, batch_size=None, data_shape=None,
-                use_random_transpose=False, num_threads=1):
+                use_random_transpose=False, num_threads=1, labels_shape=None):
     """Create  and return a tensorflow dataset from an array."""
     if labels is None:
         dataset = tf.data.Dataset.from_generator(
@@ -127,7 +128,7 @@ def get_dataset(data, labels=None, batch_size=None, data_shape=None,
                 num_parallel_calls=num_threads)
         dataset = dataset.map(
             lambda pianoroll, label: (set_pianoroll_shape(
-                pianoroll, data_shape), label),
+                pianoroll, data_shape), set_label_shape(label, labels_shape),
             num_parallel_calls=num_threads)
 
     dataset = dataset.shuffle(SHUFFLE_BUFFER_SIZE).repeat().batch(batch_size)
