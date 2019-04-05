@@ -306,6 +306,11 @@ def main():
         'dis_loss': train_nodes['dis_loss']}
     step_logger = open(os.path.join(config['log_dir'], 'step.log'), 'w')
 
+    # ======================= Writing Summaries =======================
+
+    tf.summary.scalar('train_gen_loss', train_nodes['gen_loss'])
+    tf.summary.scalar('train_dis_loss', train_nodes['dis_loss'])
+
     # ======================= Monitored Training Session =======================
     LOGGER.info("Training start.")
     with tf.train.MonitoredTrainingSession(
@@ -325,7 +330,7 @@ def main():
             step_logger.close()
             return
 
-        # Training iteration
+        # Training iteration loop
         while step < config['steps']:
 
             # Train the discriminator
@@ -333,6 +338,8 @@ def main():
                 n_dis_updates = 10 * config['n_dis_updates_per_gen_update']
             else:
                 n_dis_updates = config['n_dis_updates_per_gen_update']
+            
+            #Training the discriminator loop
             for _ in range(n_dis_updates):
                 sess.run(train_nodes['train_ops']['dis'])
 
@@ -342,6 +349,7 @@ def main():
                 step, _, tensor_logger_values = sess.run([
                     train_nodes['gen_step'], train_nodes['train_ops']['gen'],
                     tensor_logger])
+                cprint('Step:' + str(step), 'red')
                 # Logger
                 if config['log_loss_steps'] > 0:
                     LOGGER.info("step={}, {}".format(
@@ -381,7 +389,6 @@ def main():
                 LOGGER.info("Running evaluation")
 
                 eval_sample_z = scipy.stats.truncnorm.rvs(-2, 2, size=(np.prod(config['sample_grid']), params['latent_dim']))
-
                 eval_sample_y = dirohe.get_random_encodings((eval_sample_z.shape[0], sample_y.shape[1])) #TODO: Generate random dir-ohe later
 
                 feed_dict_evaluation = {

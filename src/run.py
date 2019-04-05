@@ -65,7 +65,7 @@ class MIDIGroup(object):
         elif midi_dir is not None:
             for dir, _, midi_list in walk(midi_dir):
                 for x in midi_list:
-                    if x.split('.')[-1] != 'mid':
+                    if not x.endswith('mid'):
                         continue
                     try:
                         midi_path = join(dir, x)

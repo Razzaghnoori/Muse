@@ -2,7 +2,7 @@
 n_jobs: 20
 log_loss_steps: 100 # set to 0 to disable loss logging
 save_samples_steps: 100 # set to 0 to disable saving samples
-save_summaries_steps: 0 # set to 0 to disable saving summaries
+save_summaries_steps: 100 # set to 0 to disable saving summaries
 save_checkpoint_steps: 10000 # set to 0 to disable saving checkpoints
 evaluate_steps: 100 # set to 0 to disable evaluation
 
