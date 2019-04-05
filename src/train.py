@@ -324,6 +324,8 @@ def main():
         cprint("In the fucking training loop", 'red')
         # Get global step value
         step = tf.train.global_step(sess, global_step)
+        cprint("Initial step is" + str(step), 'red')
+
         if step == 0:
             step_logger.write('# step, gen_loss, dis_loss\n')
 
