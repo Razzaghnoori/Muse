@@ -313,12 +313,15 @@ def main():
 
     # ======================= Monitored Training Session =======================
     LOGGER.info("Training start.")
+
+    cprint('Enter the Dragon', 'red')
     with tf.train.MonitoredTrainingSession(
         save_checkpoint_steps=config['save_checkpoint_steps'] * steps_per_iter,
         save_summaries_steps=config['save_summaries_steps'] * steps_per_iter,
         checkpoint_dir=config['model_dir'], log_step_count_steps=0,
         hooks=hooks, config=tf_config) as sess:
 
+        cprint("In the fucking training loop", 'red')
         # Get global step value
         step = tf.train.global_step(sess, global_step)
         if step == 0:
