@@ -34,7 +34,7 @@ class MIDI(object):
 
     def compute_pianoroll(self):
         self.num_tracks = len(self.multitrack.tracks)
-        self.pianoroll = self.multitrack.get_stacked_pianoroll()
+        self.pianoroll = self.multitrack.get_stacked_pianorolls()
 
         self.pianoroll = self.pianoroll[:, 24:108]
         self.pianoroll = self.pianoroll.reshape(-1, 4 * self.beat_res, \
@@ -78,6 +78,7 @@ class MIDIGroup(object):
 
                     except:
                         print('Crap')
+                        traceback.print_exc()
                         continue
 
             self.list_pianorolls = [x.pianoroll for x in self.list_midis]
